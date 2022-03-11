@@ -121,7 +121,7 @@
   height: 23px;
   margin: 0px 7px;
   border: 1px solid rgb(175, 216, 248);
-  background-color: #00BEDABF;
+  background-color: rgba(178, 102, 255, 0.75);
 }
 .labels-shortest {
   grid-area: shortest;
@@ -132,7 +132,7 @@
   width: 23px;
   height: 23px;
   margin: 0px 7px;
-  background-color: #FFFE6A;
+  background-color: #11c1f3;
 }
 .labels-wall {
   grid-area: wall;

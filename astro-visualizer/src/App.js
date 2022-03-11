@@ -23,7 +23,7 @@ export default function App() {
     const grid = getInitialGrid();
     setGrid(grid);
   }, []);
-  
+
   const handleMouseDown = (row, col) => {
     const newGrid = getNewGridWithWallToggled(grid, row, col);
     setGrid(newGrid);
@@ -61,11 +61,11 @@ export default function App() {
     const nodeRowsCols = nodeId.split("-");
     const row = nodeRowsCols[1];
     const col = nodeRowsCols[2];
-    if(mainNode === "node-start") {
+    if (mainNode === "node-start") {
       setStartNodeRow(row);
       setStartNodeCol(col);
-      getNewGridWithStartToggled(grid, row, col)
-    }else {
+      getNewGridWithStartToggled(grid, row, col);
+    } else {
       setFinishNodeRow(row);
       setFinishNodeCol(col);
       getNewGridWithFinishToggled(grid, row, col);
@@ -73,41 +73,45 @@ export default function App() {
   };
 
   const animateDijkstra = (visitedNodesInOrder, NodesInShortestPathOrder) => {
-    for(let i=0;i<=visitedNodesInOrder.length;i++) {
-      if(i===visitedNodesInOrder.length) {
+    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
           animateShortestPath(NodesInShortestPathOrder);
-        }, 10*i);
+        }, 10 * i);
         return;
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited';
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-visited";
       }, 10 * i);
     }
-  }
+  };
 
   const animateShortestPath = (nodesInShortestPathOrder) => {
-    for(let i=0;i<nodesInShortestPathOrder.length;i++) {
+    for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
-        const node=nodesInShortestPathOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-shortest-path';
-      }, 50*i);
+        const node = nodesInShortestPathOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-shortest-path";
+      }, 50 * i);
     }
-  }
+  };
 
-  const visualizeDijkstra = () =>{
+  const visualizeDijkstra = () => {
     const startNode = grid[startNodeRow][startNodeCol];
     const finishNode = grid[finishNodeRow][finishNodeCol];
     console.log(startNode, finishNode);
-    const visitedNodesInOrder=dijkstra(grid, startNode, finishNode);
-    const nodesInShortestPathOrder=getNodesInShortestPathOrder(finishNode);
+    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  }
-
+  };
   return (
     <>
-      <NavBar visualizeDijkstra={visualizeDijkstra} setObstacles={setObstacles}/>
+      <NavBar
+        visualizeDijkstra={visualizeDijkstra}
+        setObstacles={setObstacles}
+      />
       <div className="grid">
         {grid.map((row, rowInx) => {
           return (
