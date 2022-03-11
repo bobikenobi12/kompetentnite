@@ -4,13 +4,13 @@ import "./App.css";
 import "./index.css";
 import Node from "./Node/Node";
 import NavBar from "./NavBar/NavBar";
+import { dijkstra, getNodesInShortestPathOrder } from "./Algorithms/Dijkstras";
+let START_NODE_ROW = 15;
+let START_NODE_COL = 10;
+let FINISH_NODE_ROW = 15;
+let FINISH_NODE_COL = 35;
 
-const START_NODE_ROW = 15;
-const START_NODE_COL = 10;
-const FINISH_NODE_ROW = 15;
-const FINISH_NODE_COL = 35;
-
-function App() {
+export default function App() {
   const [grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseState] = useState(false);
   const [mainNode, setMainNode] = useState("");
@@ -18,7 +18,7 @@ function App() {
     const grid = getInitialGrid();
     setGrid(grid);
   }, []);
-
+  
   const handleMouseDown = (row, col) => {
     const newGrid = getNewGridWithWallToggled(grid, row, col);
     setGrid(newGrid);
@@ -54,15 +54,57 @@ function App() {
   const onDrop = (e) => {
     const nodeId = e.target.id;
     const nodeRowsCols = nodeId.split("-");
-    const rows = nodeRowsCols[1];
-    const cols = nodeRowsCols[2];
-    mainNode === "node-start"
-      ? getNewGridWithStartToggled(grid, rows, cols)
-      : getNewGridWithFinishToggled(grid, rows, cols);
+    const row = nodeRowsCols[1];
+    const col = nodeRowsCols[2];
+    if(mainNode === "node-start") {
+      START_NODE_ROW=row;
+      START_NODE_COL=col;
+      console.log(START_NODE_ROW, START_NODE_COL);
+      getNewGridWithStartToggled(grid, row, col)
+    }else {
+      FINISH_NODE_ROW=row;
+      FINISH_NODE_COL=col;
+      console.log(FINISH_NODE_ROW,FINISH_NODE_COL);
+      getNewGridWithFinishToggled(grid, row, col);
+    }
   };
+
+  const animateDijkstra = (visitedNodesInOrder, NodesInShortestPathOrder) => {
+    for(let i=0;i<=visitedNodesInOrder.length;i++) {
+      if(i===visitedNodesInOrder.length) {
+        setTimeout(() => {
+          animateShortestPath(NodesInShortestPathOrder);
+        }, 10*i);
+        return;
+      }
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited';
+      }, 10 * i);
+    }
+  }
+
+  const animateShortestPath = (nodesInShortestPathOrder) => {
+    for(let i=0;i<nodesInShortestPathOrder.length;i++) {
+      setTimeout(() => {
+        const node=nodesInShortestPathOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-shortest-path';
+      }, 50*i);
+    }
+  }
+
+  const visualizeDijkstra = () =>{
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    console.log(startNode, finishNode);
+    const visitedNodesInOrder=dijkstra(grid, startNode, finishNode);
+    const nodesInShortestPathOrder=getNodesInShortestPathOrder(finishNode);
+    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+
   return (
     <>
-      <NavBar/>
+      <NavBar visualizeDijkstra={visualizeDijkstra}/>
       <div className="grid">
         {grid.map((row, rowInx) => {
           return (
@@ -155,4 +197,3 @@ const getNewGridWithFinishToggled = (grid, row, col) => {
   newGrid[row][col] = newNode;
   return newGrid;
 };
-export default App;

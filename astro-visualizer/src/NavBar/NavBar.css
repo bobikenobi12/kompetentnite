@@ -1,7 +1,8 @@
 .controls {
   display: flex;
   justify-content: space-around;
-  background-color: #34495e;
+  /* background-color: #34495e; */
+  background-color: #0C164F;
   color: #fff;
 }
 .controls-logo {
@@ -12,7 +13,8 @@
   background-color: transparent;
 }
 .controls-logo:hover {
-  color: #1abc9c;
+  /* color: #1abc9c; */
+  color: #5643FD;
   cursor: pointer;
 }
 .controls-algorithms {
@@ -26,7 +28,8 @@
   font-size: 18px;
   align-self: center;
   justify-self: center;
-  background-color: #1abc9c;
+  background-color: #5643FD;
+  /* background-color: #1abc9c; */
   padding: 10px 15px;
   margin: 6px 0px;
   color: #fff;
@@ -45,7 +48,8 @@
 }
 .controls-clear:hover {
   cursor: pointer;
-  color: #1abc9c;
+  /* color: #1abc9c; */
+  color: #5643FD;
 }
 .labels {
   display: grid;
