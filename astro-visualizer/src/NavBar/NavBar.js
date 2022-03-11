@@ -3,25 +3,37 @@ import "./NavBar.css";
 import { useState } from "react";
 import { Dropdown } from "./Dropdown/Dropdown";
 
-export default function NavBar({visualizeDijkstra}) {
+export default function NavBar({ visualizeDijkstra, setObstacles }) {
   const [selected, setSelected] = useState("Dijkstras");
+  const [isClicked, setClicked] = useState(false);
   const refreshPage = () => {
     window.location.reload(false);
-  }
-  
+  };
+  const handleOnClick = () => {
+    setObstacles((prev) => !prev);
+    setClicked(!isClicked);
+  };
   return (
     <>
       <div className="controls">
         <button className="controls-logo" onClick={refreshPage}>
           Astro Visualizer
         </button>
-          <Dropdown className="controls-algorithms" setSelected={setSelected} />
-        <div>
+        <Dropdown className="controls-algorithms" setSelected={setSelected} />
         <button className="controls-visualize" onClick={visualizeDijkstra}>
           Start Journey using {selected} algorithm
         </button>
-        </div>
-        <button className="controls-clear" >Clear board</button>
+        <button
+          className={
+            isClicked
+              ? "controls-wall controls--click"
+              : "controls-wall controls-wall--hover"
+          }
+          onClick={handleOnClick}
+        >
+          Add Space Obstacles
+        </button>
+        <button className="controls-clear">Clear board</button>
       </div>
       <div className="labels">
         <div className="labels-start">

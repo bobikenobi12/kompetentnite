@@ -37,6 +37,24 @@
   border-radius: 4px;
   cursor: pointer;
 }
+.controls-wall {
+  font-family: inherit;
+  font-size: 18px;
+  align-self: center;
+  border: none;
+  background-color: transparent;
+  color: #fff;
+  padding: 15px 21px;
+}
+.controls-wall--hover:hover {
+  cursor: pointer;
+  color: #5643FD;
+}
+.controls--click {
+  background-color: #5643FD;
+  color: #fff;
+  cursor: pointer;
+}
 .controls-clear {
   font-family: inherit;
   font-size: 18px;

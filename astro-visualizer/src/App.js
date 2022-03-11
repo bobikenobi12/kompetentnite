@@ -5,15 +5,20 @@ import "./index.css";
 import Node from "./Node/Node";
 import NavBar from "./NavBar/NavBar";
 import { dijkstra, getNodesInShortestPathOrder } from "./Algorithms/Dijkstras";
-let START_NODE_ROW = 15;
-let START_NODE_COL = 10;
-let FINISH_NODE_ROW = 15;
-let FINISH_NODE_COL = 35;
+const START_NODE_ROW = 15;
+const START_NODE_COL = 10;
+const FINISH_NODE_ROW = 15;
+const FINISH_NODE_COL = 35;
 
 export default function App() {
   const [grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseState] = useState(false);
   const [mainNode, setMainNode] = useState("");
+  const [obstacles, setObstacles] = useState(false);
+  const [startNodeRow, setStartNodeRow] = useState(15);
+  const [startNodeCol, setStartNodeCol] = useState(10);
+  const [finishNodeRow, setFinishNodeRow] = useState(15);
+  const [finishNodeCol, setFinishNodeCol] = useState(35);
   useEffect(() => {
     const grid = getInitialGrid();
     setGrid(grid);
@@ -57,14 +62,12 @@ export default function App() {
     const row = nodeRowsCols[1];
     const col = nodeRowsCols[2];
     if(mainNode === "node-start") {
-      START_NODE_ROW=row;
-      START_NODE_COL=col;
-      console.log(START_NODE_ROW, START_NODE_COL);
+      setStartNodeRow(row);
+      setStartNodeCol(col);
       getNewGridWithStartToggled(grid, row, col)
     }else {
-      FINISH_NODE_ROW=row;
-      FINISH_NODE_COL=col;
-      console.log(FINISH_NODE_ROW,FINISH_NODE_COL);
+      setFinishNodeRow(row);
+      setFinishNodeCol(col);
       getNewGridWithFinishToggled(grid, row, col);
     }
   };
@@ -94,8 +97,8 @@ export default function App() {
   }
 
   const visualizeDijkstra = () =>{
-    const startNode = grid[START_NODE_ROW][START_NODE_COL];
-    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const startNode = grid[startNodeRow][startNodeCol];
+    const finishNode = grid[finishNodeRow][finishNodeCol];
     console.log(startNode, finishNode);
     const visitedNodesInOrder=dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder=getNodesInShortestPathOrder(finishNode);
@@ -104,7 +107,7 @@ export default function App() {
 
   return (
     <>
-      <NavBar visualizeDijkstra={visualizeDijkstra}/>
+      <NavBar visualizeDijkstra={visualizeDijkstra} setObstacles={setObstacles}/>
       <div className="grid">
         {grid.map((row, rowInx) => {
           return (
@@ -127,6 +130,7 @@ export default function App() {
                     onDragStart={(e, row, col) => onDragStart(e, row, col)}
                     onDragOver={(e) => onDragOver(e)}
                     onDrop={(e) => onDrop(e)}
+                    obstacles={obstacles}
                   />
                 );
               })}
