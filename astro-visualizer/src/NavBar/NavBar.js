@@ -3,7 +3,12 @@ import "./NavBar.css";
 import { useState } from "react";
 import { Dropdown } from "./Dropdown/Dropdown";
 
-export default function NavBar({ visualizeDijkstra, setObstacles }) {
+const ALGORITHM_LABELS = ["Dijkstra", "A*", "Swarm"];
+const SPEED_LABELS = ["Slow", "Medium", "Fast"];
+const ALGORITHMS_TITLE = "Algorithms";
+const SPEED_TITLE = "Speed";
+
+export default function NavBar({ visualizeDijkstra, setObstacles, setSpeed }) {
   const [selected, setSelected] = useState("Dijkstras");
   const [isClicked, setClicked] = useState(false);
   const refreshPage = () => {
@@ -19,7 +24,18 @@ export default function NavBar({ visualizeDijkstra, setObstacles }) {
         <button className="controls-logo" onClick={refreshPage}>
           Astro Visualizer
         </button>
-        <Dropdown className="controls-algorithms" setSelected={setSelected} />
+        <Dropdown
+          className="controls-algorithms"
+          setSelected={setSelected}
+          labels={ALGORITHM_LABELS}
+          title={ALGORITHMS_TITLE}
+        />
+        <Dropdown
+          className="controls-algorithms"
+          setSelected={setSpeed}
+          labels={SPEED_LABELS}
+          title={SPEED_TITLE}
+        />
         <button className="controls-visualize" onClick={visualizeDijkstra}>
           Start Journey using {selected} algorithm
         </button>
@@ -54,7 +70,7 @@ export default function NavBar({ visualizeDijkstra, setObstacles }) {
         </div>
         <div className="labels-shortest">
           <div className="labels-shortest--icon"></div>
-          Shortest Interplanetary Path 
+          Shortest Interplanetary Path
         </div>
         <div className="labels-wall">
           <div className="labels-wall--icon"></div>

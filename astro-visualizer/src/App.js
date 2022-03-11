@@ -5,6 +5,10 @@ import "./index.css";
 import Node from "./Node/Node";
 import NavBar from "./NavBar/NavBar";
 import { dijkstra, getNodesInShortestPathOrder } from "./Algorithms/Dijkstras";
+
+const SLOW_SPEED = 60;
+const MEDIUM_SPEED = 30;
+const FAST_SPEED = 10;
 const START_NODE_ROW = 15;
 const START_NODE_COL = 10;
 const FINISH_NODE_ROW = 15;
@@ -19,6 +23,24 @@ export default function App() {
   const [startNodeCol, setStartNodeCol] = useState(10);
   const [finishNodeRow, setFinishNodeRow] = useState(15);
   const [finishNodeCol, setFinishNodeCol] = useState(35);
+  const [speed, setSpeed] = useState(60);
+  const setNumberSpeed = (speedAsText) => {
+    let speedAsNumber = SLOW_SPEED;
+    switch (speedAsText) {
+      case "Fast":
+        speedAsNumber = FAST_SPEED;
+        break;
+      case "Medium":
+        speedAsNumber = MEDIUM_SPEED;
+        break;
+      case "Slow":
+        speedAsNumber = SLOW_SPEED;
+        break;
+      default:
+        throw new Error(`${speedAsText} is unknown`);
+    }
+    setSpeed(speedAsNumber);
+  };
   useEffect(() => {
     const grid = getInitialGrid();
     setGrid(grid);
@@ -71,20 +93,19 @@ export default function App() {
       getNewGridWithFinishToggled(grid, row, col);
     }
   };
-
   const animateDijkstra = (visitedNodesInOrder, NodesInShortestPathOrder) => {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
           animateShortestPath(NodesInShortestPathOrder);
-        }, 10 * i);
+        }, speed * i);
         return;
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
           "node node-visited";
-      }, 10 * i);
+      }, speed * i);
     }
   };
 
@@ -101,7 +122,6 @@ export default function App() {
   const visualizeDijkstra = () => {
     const startNode = grid[startNodeRow][startNodeCol];
     const finishNode = grid[finishNodeRow][finishNodeCol];
-    console.log(startNode, finishNode);
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
@@ -111,6 +131,7 @@ export default function App() {
       <NavBar
         visualizeDijkstra={visualizeDijkstra}
         setObstacles={setObstacles}
+        setSpeed={setNumberSpeed}
       />
       <div className="grid">
         {grid.map((row, rowInx) => {

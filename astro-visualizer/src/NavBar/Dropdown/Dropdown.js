@@ -6,7 +6,7 @@ import "./Dropdown.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
-export const Dropdown = ({ setSelected }) => {
+export const Dropdown = ({ setSelected, labels, title }) => {
   const [isOpen, setOpen] = useState(false);
   const [clickedOutside, setClickedOutside] = useState(false);
 
@@ -41,45 +41,33 @@ export const Dropdown = ({ setSelected }) => {
       ref={myRef}
     >
       <div className="dropdown-title">
-        Algorithms
+        {title}
         <FontAwesomeIcon className="dropdown-title--icon" icon={faCaretDown} />
       </div>
-      {clickedOutside ? null : isOpen ? <Items setSelected={setSelected}/> : null}
+      {clickedOutside ? null : isOpen ? <Items setSelected={setSelected} labels={labels}/> : null}
     </div>
   );
 };
 
-const Items = ({ setSelected }) => {
+const Items = ({ setSelected, labels }) => {
   const handleOnClick = (e) => {
     setSelected(e.target.textContent);
-    return null;
   };
   return (
     <div className={"dropdown-items"}>
-      <div
+      {labels.map((label,labelIdx) => {
+        return (
+        <div
         className="dropdown-item"
         onClick={(e) => {
           handleOnClick(e);
         }}
+        key={labelIdx}
       >
-        Dijkstras
+        {label}
       </div>
-      <div
-        className="dropdown-item"
-        onClick={(e) => {
-          handleOnClick(e);
-        }}
-      >
-        A*
-      </div>
-      <div
-        className="dropdown-item"
-        onClick={(e) => {
-          handleOnClick(e);
-        }}
-      >
-        Swarm
-      </div>
+        );
+      })}
     </div>
   );
 };
