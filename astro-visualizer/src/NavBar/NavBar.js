@@ -3,20 +3,27 @@ import "./NavBar.css";
 import { useState } from "react";
 import { Dropdown } from "./Dropdown/Dropdown";
 
-export default function NavBar() {
+export default function NavBar({setClear}) {
   const [selected, setSelected] = useState("Dijkstras");
+  const refreshPage = () => {
+    window.location.reload(false);
+  }
+  const clearBoard = () => {
+    setClear(true);
+  }
   return (
     <>
       <div className="controls">
+        <button className="controls-logo" onClick={refreshPage}>
+          Astro Visualizer
+        </button>
           <Dropdown className="controls-algorithms" setSelected={setSelected} />
         <div>
         <button className="controls-visualize">
           Start Journey using {selected} algorithm
         </button>
         </div>
-        <div>
-        <button className="controls-clear">Clear board</button>
-        </div>
+        <button className="controls-clear" onClick={clearBoard}>Clear board</button>
       </div>
       <div className="labels">
         <div className="labels-start">

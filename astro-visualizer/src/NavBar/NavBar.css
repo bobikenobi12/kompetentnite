@@ -1,111 +1,125 @@
 .controls {
-    display: flex;
-    justify-content: space-around;
-    background-color: #34495e;
-    color: #fff;
-  }
-  .controls-algorithms {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    justify-content: center;
-  }
-  .controls-visualize {
-    align-self: center;
-    justify-self: center;
-    background-color: #1abc9c;
-    padding: 10px 15px;
-    margin: 6px 0px;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .controls-clear {
-    align-self: center;
-    border: none;
-    background-color: transparent;
-    color: #fff;
-    padding: 15px 21px;
-  }
-  .controls-clear:hover {
-    cursor: pointer;
-    color: #1abc9c;
-  }
-  .labels {
-    display: grid;
-    gap: 10px;
-    margin: 30px 0px 15px 0px;
-    font-size: 18px;
-    grid-template-areas: "start finish unvisited visited shortest wall";
-    justify-content: space-around;
-  }
-  .labels-start {
-    grid-area: start;
-    display: flex;
-    align-items: center;
-  }
-  .labels-start--icon {
-    width: 23px;
-    height: 23px;
-    margin: 0px 7px;
-    background-image: url("../triangletwo-right.svg");
-  }
-  .labels-finish {
-    grid-area: finish;
-    display: flex;
-    align-items: center;
-  }
-  .labels-finish--icon {
-    width: 23px;
-    height: 23px;
-    margin: 0px 7px;
-    background-image: url(../circle.svg);
-  }
-  .labels-unvisited {
-    grid-area: unvisited;
-    display: flex;
-    align-items: center;
-  }
-  .labels-unvisited--icon {
-    width: 23px;
-    height: 23px;
-    margin: 0px 7px;
-    border: 1px solid rgb(175, 216, 248);
-    background-color: #fff;
-  }
-  .labels-visited {
-    grid-area: visited;
-    display: flex;
-    align-items: center;
-  }
-  .labels-visited--icon {
-    width: 23px;
-    height: 23px;
-    margin: 0px 7px;
-    border: 1px solid rgb(175, 216, 248);
-    background-color: #00BEDABF;
-  }
-  .labels-shortest {
-    grid-area: shortest;
-    display: flex;
-    align-items: center;
-  }
-  .labels-shortest--icon {
-    width: 23px;
-    height: 23px;
-    margin: 0px 7px;
-    background-color: #FFFE6A;
-  }
-  .labels-wall {
-    grid-area: wall;
-    display: flex;
-    align-items: center;
-  }
-  .labels-wall--icon {
-    width: 23px;
-    height: 23px;
-    margin: 0px 7px;
-    background-color: #0C3547;
-  }
-  
+  display: flex;
+  justify-content: space-around;
+  background-color: #34495e;
+  color: #fff;
+}
+.controls-logo {
+  font-family: inherit;
+  font-size: 18px;
+  border: none;
+  color: #fff;
+  background-color: transparent;
+}
+.controls-logo:hover {
+  color: #1abc9c;
+  cursor: pointer;
+}
+.controls-algorithms {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: center;
+}
+.controls-visualize {
+  font-family: inherit;
+  font-size: 18px;
+  align-self: center;
+  justify-self: center;
+  background-color: #1abc9c;
+  padding: 10px 15px;
+  margin: 6px 0px;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.controls-clear {
+  font-family: inherit;
+  font-size: 18px;
+  align-self: center;
+  border: none;
+  background-color: transparent;
+  color: #fff;
+  padding: 15px 21px;
+}
+.controls-clear:hover {
+  cursor: pointer;
+  color: #1abc9c;
+}
+.labels {
+  display: grid;
+  gap: 10px;
+  margin: 30px 0px 15px 0px;
+  font-size: 18px;
+  grid-template-areas: "start finish unvisited visited shortest wall";
+  justify-content: space-around;
+}
+.labels-start {
+  grid-area: start;
+  display: flex;
+  align-items: center;
+}
+.labels-start--icon {
+  width: 23px;
+  height: 23px;
+  margin: 0px 7px;
+  background-image: url("../triangletwo-right.svg");
+}
+.labels-finish {
+  grid-area: finish;
+  display: flex;
+  align-items: center;
+}
+.labels-finish--icon {
+  width: 23px;
+  height: 23px;
+  margin: 0px 7px;
+  background-image: url(../circle.svg);
+}
+.labels-unvisited {
+  grid-area: unvisited;
+  display: flex;
+  align-items: center;
+}
+.labels-unvisited--icon {
+  width: 23px;
+  height: 23px;
+  margin: 0px 7px;
+  border: 1px solid rgb(175, 216, 248);
+  background-color: #fff;
+}
+.labels-visited {
+  grid-area: visited;
+  display: flex;
+  align-items: center;
+}
+.labels-visited--icon {
+  width: 23px;
+  height: 23px;
+  margin: 0px 7px;
+  border: 1px solid rgb(175, 216, 248);
+  background-color: #00BEDABF;
+}
+.labels-shortest {
+  grid-area: shortest;
+  display: flex;
+  align-items: center;
+}
+.labels-shortest--icon {
+  width: 23px;
+  height: 23px;
+  margin: 0px 7px;
+  background-color: #FFFE6A;
+}
+.labels-wall {
+  grid-area: wall;
+  display: flex;
+  align-items: center;
+}
+.labels-wall--icon {
+  width: 23px;
+  height: 23px;
+  margin: 0px 7px;
+  background-color: #0C3547;
+}
