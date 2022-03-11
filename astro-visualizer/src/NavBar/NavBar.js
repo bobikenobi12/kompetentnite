@@ -46,19 +46,19 @@ export default function NavBar({ visualizeDijkstra, setObstacles }) {
         </div>
         <div className="labels-unvisited">
           <div className="labels-unvisited--icon"></div>
-          Unvisited Node
+          Unvisited Space Matter
         </div>
         <div className="labels-visited">
           <div className="labels-visited--icon"></div>
-          Visited Nodes
+          Visited Space Matter
         </div>
         <div className="labels-shortest">
           <div className="labels-shortest--icon"></div>
-          Shortest-path Node
+          Shortest Interplanetary Path 
         </div>
         <div className="labels-wall">
           <div className="labels-wall--icon"></div>
-          Select Space Obstacles
+          Space Obstacles
         </div>
       </div>
     </>
