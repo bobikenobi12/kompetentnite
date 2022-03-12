@@ -5,6 +5,7 @@ import "./index.css";
 import Node from "./Node/Node";
 import NavBar from "./NavBar/NavBar";
 import { dijkstra, getNodesInShortestPathOrder } from "./Algorithms/Dijkstras";
+import { generateRandomObstacles } from "./RandObstacles/RandomDraw";
 
 const SLOW_SPEED = 60;
 const MEDIUM_SPEED = 30;
@@ -147,9 +148,9 @@ export default function App() {
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   };
 
-  const addWalls = () => {
+  // const addWalls = () => {
 
-  }
+  // }
   return (
     <>
       <NavBar
