@@ -1,5 +1,4 @@
 import PriorityQueue from "priorityqueuejs";
-import { outOfBounds } from "../RandObstacles/RandomDraw";
 
 export function euclidianDistance(node, targetNode) {
     const dx=node.row - targetNode.row;

@@ -1,7 +1,7 @@
 .dropdown {
     display: flex;
     justify-content: center;
-    width: 135px;
+    width: 160px;
   }
   .dropdown--hover:hover {
     /* color: #1abc9c; */
@@ -32,7 +32,7 @@
     border-radius: 4px;
   }
   .dropdown-items .dropdown-item {
-    width: 120px;
+    width: 160px;
     color: #fff;
     padding: 10px 12px;
   }

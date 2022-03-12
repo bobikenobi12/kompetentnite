@@ -6,6 +6,8 @@ import Node from "./Node/Node";
 import NavBar from "./NavBar/NavBar";
 import { dijkstra, getNodesInShortestPathOrder } from "./Algorithms/Dijkstras";
 import { generateRandomObstacles } from "./RandObstacles/RandomDraw";
+import { aStar, euclidianDistance, manhattanDistance, maxComponentDistance } from "./Algorithms/Astar";
+import { algorithm, algorithmButtonText } from "./NavBar/NavBar";
 
 const SLOW_SPEED = 60;
 const MEDIUM_SPEED = 30;
@@ -16,6 +18,7 @@ const FINISH_NODE_ROW = 15;
 const FINISH_NODE_COL = 35;
 const ROWS = 20;
 const COLS = 40;
+
 export default function App() {
   const [grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseState] = useState(false);
@@ -65,6 +68,27 @@ export default function App() {
         throw new Error(`${mazeAsText} is unknown`);
     }
   };
+  
+  const getAlgorithm = (algorithmAsText) => {
+    switch(algorithmAsText) {
+      case algorithmButtonText(algorithm.dijkstra):
+        return dijkstra;
+      case algorithmButtonText(algorithm.aStarEuclidianDistance):
+      return (grid, startNode, finishNode) => {
+        return aStar(grid, startNode, finishNode,euclidianDistance);
+      }
+      case algorithmButtonText(algorithm.aStarManhattanDistamce):
+      return (grid, startNode, finishNode) => {
+        return aStar(grid, startNode, finishNode, manhattanDistance);
+      }
+      case algorithmButtonText(algorithm.aStarMaxComponentDistance):
+      return (grid, startNode, finishNode) => {
+        return aStar(grid, startNode, finishNode, maxComponentDistance);
+      }
+      default: throw new Error(`${algorithmAsText} is unknown`);
+    }
+  }
+
   useEffect(() => {
     const grid = getInitialGrid();
     setGrid(grid);
@@ -79,7 +103,7 @@ export default function App() {
   const handleMouseUp = () => {
     setMouseState(false);
   };
-
+  
   const handleMouseEnter = (row, col) => {
     if (!mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(grid, row, col);
@@ -117,7 +141,7 @@ export default function App() {
       getNewGridWithFinishToggled(grid, row, col);
     }
   };
-  const animateDijkstra = (visitedNodesInOrder, NodesInShortestPathOrder) => {
+  const animateAlgorithm = (visitedNodesInOrder, NodesInShortestPathOrder) => {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -143,12 +167,13 @@ export default function App() {
     }
   };
 
-  const visualizeDijkstra = () => {
+  const visualizeAlgorithm = (algorithmAsText) => {
+    const algorithm = getAlgorithm(algorithmAsText);
     const startNode = grid[startNodeRow][startNodeCol];
     const finishNode = grid[finishNodeRow][finishNodeCol];
-    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    const visitedNodesInOrder = algorithm(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder);
   };
 
   const timeout = (delay) => {
@@ -188,7 +213,7 @@ export default function App() {
   return (
     <>
       <NavBar
-        visualizeDijkstra={visualizeDijkstra}
+        visualizeAlgorithm={visualizeAlgorithm}
         setObstacles={setObstacles}
         setSpeed={setNumberSpeed}
         setMaze={setMazeAsWalls}

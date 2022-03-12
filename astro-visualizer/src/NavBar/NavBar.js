@@ -3,20 +3,30 @@ import "./NavBar.css";
 import { useState } from "react";
 import { Dropdown } from "./Dropdown/Dropdown";
 
-const ALGORITHM_LABELS = ["Dijkstra", "A*"];
+export const algorithm = {
+  dijkstra: "Dijkstra",
+  aStarEuclidianDistance: "A* Euclidian",
+  aStarManhattanDistamce: "A* Manhattan",
+  aStarMaxComponentDistance: "A* MaxComponent"
+}
+const ALGORITHM_LABELS = Object.values(algorithm);
 const SPEED_LABELS = ["Slow", "Medium", "Fast"];
 const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Recursive Division"];
 const ALGORITHMS_TITLE = "Algorithms";
 const SPEED_TITLE = "Speed";
 const MAZE_TITLE = "Draw";
 
+export const algorithmButtonText = (algorithmAsText) => {
+  return `Start Journey using ${algorithmAsText} algorithm`;
+}
+
 export default function NavBar({
-  visualizeDijkstra,
+  visualizeAlgorithm,
   setSpeed,
   setMaze,
   disableVisualizeButton,
 }) {
-  const [selected, setSelected] = useState("Dijkstras");
+  const [selected, setSelected] = useState(algorithm.dijkstra);
   const refreshPage = () => {
     window.location.reload(false);
   };
@@ -40,10 +50,12 @@ export default function NavBar({
         />
         <button
           className="controls-visualize"
-          onClick={visualizeDijkstra}
+          onClick={(e) => {
+            visualizeAlgorithm(e.target.textContent);
+          }}
           disabled={disableVisualizeButton}
         >
-          Start Journey using {selected} algorithm
+          {algorithmButtonText(selected)}
         </button>
         <Dropdown
           className="controls-algorithms"
