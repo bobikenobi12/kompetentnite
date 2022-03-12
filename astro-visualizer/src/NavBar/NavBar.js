@@ -15,7 +15,6 @@ export default function NavBar({
   setSpeed,
   setMaze,
   disableVisualizeButton,
-  clearBoard,
 }) {
   const [selected, setSelected] = useState("Dijkstras");
   const refreshPage = () => {
@@ -52,7 +51,7 @@ export default function NavBar({
           labels={MAZE_LABELS}
           title={MAZE_TITLE}
         />
-        <button className="controls-clear" onClick={clearBoard}>
+        <button className="controls-clear">
           Clear board
         </button>
       </div>

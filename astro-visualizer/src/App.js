@@ -65,18 +65,6 @@ export default function App() {
         throw new Error(`${mazeAsText} is unknown`);
     }
   };
-  const clearBoard = () => {
-    grid.forEach((row) => {
-      row.forEach((node) => {
-        if (node.isStart || node.isFinish || !node.isWall) {
-          return;
-        }
-        const newGrid = getNewGridWithWallToggled(grid, node.row, node.col);
-        setGrid(newGrid);
-      });
-    });
-  };
-
   useEffect(() => {
     const grid = getInitialGrid();
     setGrid(grid);
@@ -205,7 +193,6 @@ export default function App() {
         setSpeed={setNumberSpeed}
         setMaze={setMazeAsWalls}
         disableVisualizeButton={isBlockedVisualize}
-        clearBoard={clearBoard}
       />
       <div className="grid">
         {grid.map((row, rowInx) => {
