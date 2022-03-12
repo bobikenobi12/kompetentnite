@@ -14,20 +14,26 @@ export default function Node({
   onDragStart,
   onDragOver,
   onDrop,
-  obstacles
+  obstacles,
+  isVisited,
+  isOnPath
 }) {
   const extraClassName = isFinish
     ? "node-finish"
     : isStart
     ? "node-start"
     : isWall
-    ? "node-wall"
+    ? "node-wall" 
     : "";
-  return  obstacles ?
+    
+  const isVisitedClass = isVisited ? "node-visited" : "";
+  const isOnPathClass = isOnPath ? "node-shortest-path" : "";
+
+    return  obstacles ?
   (
     <div
       id={`node-${row}-${col}`}
-      className={`node ${extraClassName}`}
+      className={`node ${extraClassName} ${isVisitedClass} ${isOnPathClass}`}
       onMouseDown={() => onMouseDown(row, col)}
       onMouseEnter={() => onMouseEnter(row, col)}
       onMouseUp={() => onMouseUp()}

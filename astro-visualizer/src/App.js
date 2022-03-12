@@ -6,7 +6,12 @@ import Node from "./Node/Node";
 import NavBar from "./NavBar/NavBar";
 import { dijkstra, getNodesInShortestPathOrder } from "./Algorithms/Dijkstras";
 import { generateRandomObstacles } from "./RandObstacles/RandomDraw";
-import { aStar, euclidianDistance, manhattanDistance, maxComponentDistance } from "./Algorithms/Astar";
+import {
+  aStar,
+  euclidianDistance,
+  manhattanDistance,
+  maxComponentDistance,
+} from "./Algorithms/Astar";
 import { algorithm, algorithmButtonText } from "./NavBar/NavBar";
 
 const SLOW_SPEED = 60;
@@ -68,26 +73,56 @@ export default function App() {
         throw new Error(`${mazeAsText} is unknown`);
     }
   };
-  
+
   const getAlgorithm = (algorithmAsText) => {
-    switch(algorithmAsText) {
+    switch (algorithmAsText) {
       case algorithmButtonText(algorithm.dijkstra):
         return dijkstra;
       case algorithmButtonText(algorithm.aStarEuclidianDistance):
-      return (grid, startNode, finishNode) => {
-        return aStar(grid, startNode, finishNode,euclidianDistance);
-      }
+        return (grid, startNode, finishNode) => {
+          return aStar(grid, startNode, finishNode, euclidianDistance);
+        };
       case algorithmButtonText(algorithm.aStarManhattanDistamce):
-      return (grid, startNode, finishNode) => {
-        return aStar(grid, startNode, finishNode, manhattanDistance);
-      }
+        return (grid, startNode, finishNode) => {
+          return aStar(grid, startNode, finishNode, manhattanDistance);
+        };
       case algorithmButtonText(algorithm.aStarMaxComponentDistance):
-      return (grid, startNode, finishNode) => {
-        return aStar(grid, startNode, finishNode, maxComponentDistance);
-      }
-      default: throw new Error(`${algorithmAsText} is unknown`);
+        return (grid, startNode, finishNode) => {
+          return aStar(grid, startNode, finishNode, maxComponentDistance);
+        };
+      default:
+        throw new Error(`${algorithmAsText} is unknown`);
     }
-  }
+  };
+  const clearBoard = () => {
+    const newGrid = [];
+    for (let row of grid) {
+      const newRow = [];
+      for (let oldNode of row) {
+        newRow.push({
+          ...oldNode,
+          isVisited: false,
+          isOnPath: false,
+          distance: Infinity,
+          previousNode: null,
+        });
+        const extraClassName = oldNode.isFinish
+          ? "node-finish"
+          : oldNode.isStart
+          ? "node-start"
+          : oldNode.isWall
+          ? "node-wall"
+          : "";
+        document.getElementById(`node-${oldNode.row}-${oldNode.col}`).className =
+          "node " + extraClassName;
+      }
+      newGrid.push(newRow);
+    }
+    setGrid(newGrid);
+    setMouseState(false);
+    setIsBlockedVisualize(false);
+    setObstacles(false);
+  };
 
   useEffect(() => {
     const grid = getInitialGrid();
@@ -103,7 +138,7 @@ export default function App() {
   const handleMouseUp = () => {
     setMouseState(false);
   };
-  
+
   const handleMouseEnter = (row, col) => {
     if (!mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(grid, row, col);
@@ -141,6 +176,7 @@ export default function App() {
       getNewGridWithFinishToggled(grid, row, col);
     }
   };
+
   const animateAlgorithm = (visitedNodesInOrder, NodesInShortestPathOrder) => {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
@@ -151,6 +187,7 @@ export default function App() {
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
+        node.isVisited = true;
         document.getElementById(`node-${node.row}-${node.col}`).className =
           "node node-visited";
       }, speed * i);
@@ -161,8 +198,15 @@ export default function App() {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
+        node.isOnPath = true;
+        node.isVisited = false;
         document.getElementById(`node-${node.row}-${node.col}`).className =
           "node node-shortest-path";
+        if (i === nodesInShortestPathOrder.length - 1) {
+          setTimeout(() => {
+            setGrid(grid);
+          }, 30);
+        }
       }, 50 * i);
     }
   };
@@ -186,25 +230,21 @@ export default function App() {
     setIsBlockedVisualize(true);
     let doneWith = 0;
     let empties = Array(walls.length).fill(false);
-    while (doneWith!==walls.length) {
+    while (doneWith !== walls.length) {
       let newGrid = null;
       for (let i = 0; i < walls.length; i++) {
-        if(walls[i].length === 0) {
-          if(!empties[i]){
+        if (walls[i].length === 0) {
+          if (!empties[i]) {
             empties[i] = true;
             doneWith++;
           }
           continue;
         }
         let cell = walls[i].pop();
-        newGrid = getNewGridWithWallToggled(
-          grid,
-          cell.row,
-          cell.col
-        );
+        newGrid = getNewGridWithWallToggled(grid, cell.row, cell.col);
       }
-      if(newGrid !== null) {
-      setGrid(newGrid);
+      if (newGrid !== null) {
+        setGrid(newGrid);
       }
       await timeout(300);
     }
@@ -218,13 +258,22 @@ export default function App() {
         setSpeed={setNumberSpeed}
         setMaze={setMazeAsWalls}
         disableVisualizeButton={isBlockedVisualize}
+        clearBoard={clearBoard}
       />
       <div className="grid">
         {grid.map((row, rowInx) => {
           return (
             <div key={rowInx}>
               {row.map((node, nodeIdx) => {
-                const { row, col, isFinish, isStart, isWall } = node;
+                const {
+                  row,
+                  col,
+                  isFinish,
+                  isStart,
+                  isWall,
+                  isOnPath,
+                  isVisited,
+                } = node;
                 return (
                   <Node
                     key={nodeIdx}
@@ -242,6 +291,8 @@ export default function App() {
                     onDragOver={(e) => onDragOver(e)}
                     onDrop={(e) => onDrop(e)}
                     obstacles={obstacles}
+                    isVisited={isVisited}
+                    isOnPath={isOnPath}
                   />
                 );
               })}
@@ -272,6 +323,7 @@ const createNode = (col, row) => {
     isStart: row === START_NODE_ROW && col === START_NODE_COL,
     isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
     distance: Infinity,
+    isOnPath: false,
     isVisited: false,
     isWall: false,
     previousNode: null,
