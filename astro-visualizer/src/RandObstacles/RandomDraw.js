@@ -1,4 +1,4 @@
-const threshold = 0.25;
+const threshold = 0.6;
 
 const makeGrid = (rows, cols) => {
   const grid = [];
@@ -14,16 +14,16 @@ const makeGrid = (rows, cols) => {
 
 export const generateRandomObstacles = (rows, cols) => {
   const grid = makeGrid(rows, cols);
-  generateOnRandom(grid);
-  return grid;
+  const wallsInOrder = generateOnRandom(grid);
+  return wallsInOrder;
 };
 
 const outOfBounds = (row, col, rows, cols) => {
-  return currRow === rows || urrCol === cols || currRow < 0 || currCol < 0
+  return row === rows || col === cols || row < 0 || col < 0
 }
 
 const randomIntUpToLimit = (limit) => {
-  return Math.floor(Math.Random() * limit);
+  return Math.floor(Math.random() * limit);
 }
 
 const extractSizes = (grid) => {
@@ -33,10 +33,10 @@ const extractSizes = (grid) => {
 }
 
 const generateOnRandom = (grid) => {
+  const wallsInOrder = [];
   const {rows, cols} = extractSizes(grid);
   const minSize = cols > rows ? rows : cols;
-  const cells = rows * cols;
-  const walls = Math.floor(randomIntUpToLimit(cells) * threshold);
+  const walls = Math.floor(randomIntUpToLimit(rows+cols) * threshold);
   for (let wall = 0; wall < walls; wall++) { 
     const startRow = randomIntUpToLimit(rows);
     const startCol = randomIntUpToLimit(cols);
@@ -45,17 +45,19 @@ const generateOnRandom = (grid) => {
 
     let currRow = startRow;
     let currCol = startCol;
-    const length = Math.floor(Math.Random() * minSize);
+    const length = Math.floor(Math.random() * minSize);
 
     for (let i = 0; i <= length; i++) {
       if (outOfBounds(currRow, currCol, rows, cols)) {
         break;
       }
+      wallsInOrder.push({row: currRow, col:currCol})
       grid[currRow][currCol] = true;
       currRow += directionX;
       currCol += directionY;
     }
   }
+  return wallsInOrder;
 };
 
 const randomDirection = () => {

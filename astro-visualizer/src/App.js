@@ -14,7 +14,8 @@ const START_NODE_ROW = 15;
 const START_NODE_COL = 10;
 const FINISH_NODE_ROW = 15;
 const FINISH_NODE_COL = 35;
-
+const ROWS = 20;
+const COLS = 40;
 export default function App() {
   const [grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseState] = useState(false);
@@ -26,6 +27,8 @@ export default function App() {
   const [finishNodeCol, setFinishNodeCol] = useState(35);
   const [speed, setSpeed] = useState(60);
   const [maze, setMaze] = useState("Random");
+  const [isBlockedVisualize, setIsBlockedVisualize] = useState(false);
+
   const setNumberSpeed = (speedAsText) => {
     let speedAsNumber = SLOW_SPEED;
     switch (speedAsText) {
@@ -53,6 +56,7 @@ export default function App() {
       case "Random Draw":
         setObstacles(false);
         setMaze("Random Draw");
+        addWalls();
         break;
       case "Recursive Division":
         setObstacles(false);
@@ -148,9 +152,22 @@ export default function App() {
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   };
 
-  // const addWalls = () => {
-
-  // }
+  const timeout = (delay) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(resolve, delay)
+    })
+  }
+  const addWalls = async() => {
+    
+    const walls = generateRandomObstacles(ROWS, COLS);
+    setIsBlockedVisualize(true);
+    for (let i = 0; i < walls.length; i++) {
+      const newGrid = getNewGridWithWallToggled(grid, walls[i].row, walls[i].col);
+      setGrid(newGrid);
+      await timeout(100);
+    }
+    setIsBlockedVisualize(false);
+  };
   return (
     <>
       <NavBar
@@ -158,6 +175,7 @@ export default function App() {
         setObstacles={setObstacles}
         setSpeed={setNumberSpeed}
         setMaze={setMazeAsWalls}
+        disableVisualizeButton={isBlockedVisualize}
       />
       <div className="grid">
         {grid.map((row, rowInx) => {

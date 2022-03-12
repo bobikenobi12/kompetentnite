@@ -10,7 +10,7 @@ const ALGORITHMS_TITLE = "Algorithms";
 const SPEED_TITLE = "Speed";
 const MAZE_TITLE = "Draw"
 
-export default function NavBar({ visualizeDijkstra, setObstacles, setSpeed, setMaze }) {
+export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVisualizeButton }) {
   const [selected, setSelected] = useState("Dijkstras");
   const refreshPage = () => {
     window.location.reload(false);
@@ -33,7 +33,7 @@ export default function NavBar({ visualizeDijkstra, setObstacles, setSpeed, setM
           labels={SPEED_LABELS}
           title={SPEED_TITLE}
         />
-        <button className="controls-visualize" onClick={visualizeDijkstra}>
+        <button className="controls-visualize" onClick={visualizeDijkstra} disabled={disableVisualizeButton}>
           Start Journey using {selected} algorithm
         </button>
         <Dropdown
@@ -70,6 +70,7 @@ export default function NavBar({ visualizeDijkstra, setObstacles, setSpeed, setM
           Space Obstacles
         </div>
       </div>
+      <div className="spacing"></div>
     </>
   );
 }
