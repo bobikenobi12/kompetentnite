@@ -72,10 +72,11 @@
 .labels {
   display: grid;
   gap: 10px;
-  margin: 30px 0px 15px 0px;
+  padding: 30px 0px 30px 0px;
   font-size: 18px;
   grid-template-areas: "start finish unvisited visited shortest wall";
   justify-content: space-around;
+  background-color: #fff;
 }
 .labels-start {
   grid-area: start;
@@ -86,7 +87,7 @@
   width: 23px;
   height: 23px;
   margin: 0px 7px;
-  background-image: url("../triangletwo-right.svg");
+  background-image: url("../earth.png");
 }
 .labels-finish {
   grid-area: finish;
@@ -97,7 +98,7 @@
   width: 23px;
   height: 23px;
   margin: 0px 7px;
-  background-image: url(../circle.svg);
+  background-image: url("../mars.png");
 }
 .labels-unvisited {
   grid-area: unvisited;
@@ -147,5 +148,4 @@
 }
 .spacing {
   width: 100%;
-  padding-top: 15px;
 }

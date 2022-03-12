@@ -21,8 +21,8 @@ const START_NODE_ROW = 15;
 const START_NODE_COL = 10;
 const FINISH_NODE_ROW = 15;
 const FINISH_NODE_COL = 35;
-const ROWS = 20;
-const COLS = 40;
+const ROWS = 25;
+const COLS = 60;
 
 export default function App() {
   const [grid, setGrid] = useState([]);
@@ -65,10 +65,10 @@ export default function App() {
         setMaze("Random Draw");
         addWalls();
         break;
-      case "Recursive Division":
-        setObstacles(false);
-        setMaze("Recursive Division");
-        break;
+      // case "Recursive Division":
+      //   setObstacles(false);
+      //   setMaze("Recursive Division");
+      //   break;
       default:
         throw new Error(`${mazeAsText} is unknown`);
     }

@@ -4,12 +4,10 @@
     width: 160px;
   }
   .dropdown--hover:hover {
-    /* color: #1abc9c; */
     color: #5643FD;
     cursor: pointer;
   }
   .dropdown--click {
-    /* background-color: #1abc9c; */
     background-color: #5643FD;
     color: #fff;
     cursor: pointer;
@@ -27,7 +25,6 @@
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    /* background-color: #34495e; */
     background-color: #0C164F;
     border-radius: 4px;
   }
@@ -38,7 +35,6 @@
   }
   .dropdown-items .dropdown-item:hover {
     color: #ffffff;
-    /* background-color: #1abc9c; */
     background-color: #5643FD;
     border-radius: 4px;
   }

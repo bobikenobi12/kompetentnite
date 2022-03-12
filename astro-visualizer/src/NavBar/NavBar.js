@@ -11,7 +11,7 @@ export const algorithm = {
 }
 const ALGORITHM_LABELS = Object.values(algorithm);
 const SPEED_LABELS = ["Slow", "Medium", "Fast"];
-const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Recursive Division"];
+const MAZE_LABELS = ["Draw Obstacles", "Random Draw"];
 const ALGORITHMS_TITLE = "Algorithms";
 const SPEED_TITLE = "Speed";
 const MAZE_TITLE = "Draw";
@@ -75,7 +75,7 @@ export default function NavBar({
         </div>
         <div className="labels-finish">
           <div className="labels-finish--icon"></div>
-          Finish Planet
+          Target Planet
         </div>
         <div className="labels-unvisited">
           <div className="labels-unvisited--icon"></div>
