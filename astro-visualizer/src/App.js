@@ -24,6 +24,7 @@ export default function App() {
   const [finishNodeRow, setFinishNodeRow] = useState(15);
   const [finishNodeCol, setFinishNodeCol] = useState(35);
   const [speed, setSpeed] = useState(60);
+  const [maze, setMaze] = useState("Random");
   const setNumberSpeed = (speedAsText) => {
     let speedAsNumber = SLOW_SPEED;
     switch (speedAsText) {
@@ -40,6 +41,25 @@ export default function App() {
         throw new Error(`${speedAsText} is unknown`);
     }
     setSpeed(speedAsNumber);
+  };
+
+  let setMazeAsWalls = (mazeAsText) => {
+    switch (mazeAsText) {
+      case "Draw Obstacles":
+        setObstacles(true);
+        setMaze(false);
+        break;
+      case "Random Draw":
+        setObstacles(false);
+        setMaze("Random Draw");
+        break;
+      case "Recursive Division":
+        setObstacles(false);
+        setMaze("Recursive Division");
+        break;
+      default:
+        throw new Error(`${mazeAsText} is unknown`);
+    }
   };
   useEffect(() => {
     const grid = getInitialGrid();
@@ -126,12 +146,17 @@ export default function App() {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   };
+
+  const addWalls = () => {
+
+  }
   return (
     <>
       <NavBar
         visualizeDijkstra={visualizeDijkstra}
         setObstacles={setObstacles}
         setSpeed={setNumberSpeed}
+        setMaze={setMazeAsWalls}
       />
       <div className="grid">
         {grid.map((row, rowInx) => {
