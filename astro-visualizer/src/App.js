@@ -47,7 +47,7 @@ export default function App() {
     setSpeed(speedAsNumber);
   };
 
-  let setMazeAsWalls = (mazeAsText) => {
+  const setMazeAsWalls = (mazeAsText) => {
     switch (mazeAsText) {
       case "Draw Obstacles":
         setObstacles(true);
@@ -66,6 +66,18 @@ export default function App() {
         throw new Error(`${mazeAsText} is unknown`);
     }
   };
+  const clearBoard = () => {
+    grid.forEach((row) => {
+      row.forEach((node) => {
+        if(node.isStart || node.isFinish || !node.isWall) {
+          return;
+        }
+        const newGrid = getNewGridWithWallToggled(grid, node.row, node.col);
+        setGrid(newGrid);
+      })
+    });
+  };
+
   useEffect(() => {
     const grid = getInitialGrid();
     setGrid(grid);
@@ -154,15 +166,18 @@ export default function App() {
 
   const timeout = (delay) => {
     return new Promise((resolve, reject) => {
-      setTimeout(resolve, delay)
-    })
-  }
-  const addWalls = async() => {
-    
+      setTimeout(resolve, delay);
+    });
+  };
+  const addWalls = async () => {
     const walls = generateRandomObstacles(ROWS, COLS);
     setIsBlockedVisualize(true);
     for (let i = 0; i < walls.length; i++) {
-      const newGrid = getNewGridWithWallToggled(grid, walls[i].row, walls[i].col);
+      const newGrid = getNewGridWithWallToggled(
+        grid,
+        walls[i].row,
+        walls[i].col
+      );
       setGrid(newGrid);
       await timeout(100);
     }
@@ -176,6 +191,7 @@ export default function App() {
         setSpeed={setNumberSpeed}
         setMaze={setMazeAsWalls}
         disableVisualizeButton={isBlockedVisualize}
+        clearBoard={clearBoard}
       />
       <div className="grid">
         {grid.map((row, rowInx) => {
@@ -213,9 +229,9 @@ export default function App() {
 
 const getInitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 20; row++) {
+  for (let row = 0; row < ROWS; row++) {
     const currentRow = [];
-    for (let col = 0; col < 40; col++) {
+    for (let col = 0; col < COLS; col++) {
       currentRow.push(createNode(col, row));
     }
     grid.push(currentRow);

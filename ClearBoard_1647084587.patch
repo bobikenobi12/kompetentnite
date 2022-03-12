@@ -1,0 +1,399 @@
+diff --git a/VisualizeRandomPath.patch b/VisualizeRandomPath.patch
+deleted file mode 100644
+index efaa355..0000000
+--- a/VisualizeRandomPath.patch
++++ /dev/null
+@@ -1,224 +0,0 @@
+-diff --git a/astro-visualizer/src/App.js b/astro-visualizer/src/App.js
+-index 5bcd1f4..e13964a 100644
+---- a/astro-visualizer/src/App.js
+-+++ b/astro-visualizer/src/App.js
+-@@ -14,7 +14,8 @@ const START_NODE_ROW = 15;
+- const START_NODE_COL = 10;
+- const FINISH_NODE_ROW = 15;
+- const FINISH_NODE_COL = 35;
+--
+-+const ROWS = 20;
+-+const COLS = 40;
+- export default function App() {
+-   const [grid, setGrid] = useState([]);
+-   const [mouseIsPressed, setMouseState] = useState(false);
+-@@ -26,6 +27,8 @@ export default function App() {
+-   const [finishNodeCol, setFinishNodeCol] = useState(35);
+-   const [speed, setSpeed] = useState(60);
+-   const [maze, setMaze] = useState("Random");
+-+  const [isBlockedVisualize, setIsBlockedVisualize] = useState(false);
+-+
+-   const setNumberSpeed = (speedAsText) => {
+-     let speedAsNumber = SLOW_SPEED;
+-     switch (speedAsText) {
+-@@ -53,6 +56,7 @@ export default function App() {
+-       case "Random Draw":
+-         setObstacles(false);
+-         setMaze("Random Draw");
+-+        addWalls();
+-         break;
+-       case "Recursive Division":
+-         setObstacles(false);
+-@@ -148,9 +152,22 @@ export default function App() {
+-     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+-   };
+- 
+--  // const addWalls = () => {
+--
+--  // }
+-+  const timeout = (delay) => {
+-+    return new Promise((resolve, reject) => {
+-+      setTimeout(resolve, delay)
+-+    })
+-+  }
+-+  const addWalls = async() => {
+-+    
+-+    const walls = generateRandomObstacles(ROWS, COLS);
+-+    setIsBlockedVisualize(true);
+-+    for (let i = 0; i < walls.length; i++) {
+-+      const newGrid = getNewGridWithWallToggled(grid, walls[i].row, walls[i].col);
+-+      setGrid(newGrid);
+-+      await timeout(100);
+-+    }
+-+    setIsBlockedVisualize(false);
+-+  };
+-   return (
+-     <>
+-       <NavBar
+-@@ -158,6 +175,7 @@ export default function App() {
+-         setObstacles={setObstacles}
+-         setSpeed={setNumberSpeed}
+-         setMaze={setMazeAsWalls}
+-+        disableVisualizeButton={isBlockedVisualize}
+-       />
+-       <div className="grid">
+-         {grid.map((row, rowInx) => {
+-diff --git a/astro-visualizer/src/NavBar/NavBar.css b/astro-visualizer/src/NavBar/NavBar.css
+-index d539cf4..508daaf 100644
+---- a/astro-visualizer/src/NavBar/NavBar.css
+-+++ b/astro-visualizer/src/NavBar/NavBar.css
+-@@ -145,3 +145,7 @@
+-   margin: 0px 7px;
+-   background-color: #0C3547;
+- }
+-+.spacing {
+-+  width: 100%;
+-+  padding-top: 15px;
+-+}
+-diff --git a/astro-visualizer/src/NavBar/NavBar.js b/astro-visualizer/src/NavBar/NavBar.js
+-index 5290727..7a81c87 100644
+---- a/astro-visualizer/src/NavBar/NavBar.js
+-+++ b/astro-visualizer/src/NavBar/NavBar.js
+-@@ -10,7 +10,7 @@ const ALGORITHMS_TITLE = "Algorithms";
+- const SPEED_TITLE = "Speed";
+- const MAZE_TITLE = "Draw"
+- 
+--export default function NavBar({ visualizeDijkstra, setObstacles, setSpeed, setMaze }) {
+-+export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVisualizeButton }) {
+-   const [selected, setSelected] = useState("Dijkstras");
+-   const refreshPage = () => {
+-     window.location.reload(false);
+-@@ -33,7 +33,7 @@ export default function NavBar({ visualizeDijkstra, setObstacles, setSpeed, setM
+-           labels={SPEED_LABELS}
+-           title={SPEED_TITLE}
+-         />
+--        <button className="controls-visualize" onClick={visualizeDijkstra}>
+-+        <button className="controls-visualize" onClick={visualizeDijkstra} disabled={disableVisualizeButton}>
+-           Start Journey using {selected} algorithm
+-         </button>
+-         <Dropdown
+-@@ -70,6 +70,7 @@ export default function NavBar({ visualizeDijkstra, setObstacles, setSpeed, setM
+-           Space Obstacles
+-         </div>
+-       </div>
+-+      <div className="spacing"></div>
+-     </>
+-   );
+- }
+-diff --git a/astro-visualizer/src/Node/Node.css b/astro-visualizer/src/Node/Node.css
+-index 7906608..af0e68a 100644
+---- a/astro-visualizer/src/Node/Node.css
+-+++ b/astro-visualizer/src/Node/Node.css
+-@@ -15,8 +15,38 @@
+- }
+- 
+- .node-wall {
+--	background-image: url("../meteor-solid.svg");
+-+	animation-name: obstacleAnimation;
+-+	animation-duration: 1.5s;
+-+	animation-timing-function: ease-out;
+-+	animation-delay: 0;
+-+	animation-direction: alternate;
+-+	animation-iteration-count: 1;
+-+	animation-fill-mode: forwards;
+-+	animation-play-state: running;
+-+}
+-+
+-+@keyframes obstacleAnimation {
+-+	0% {
+-+		transform: scale(0.6);
+-+		background-image: url("../meteor-solid.svg");
+-+		border-radius: 100%;
+-+	}
+-+
+-+	50% {
+-+		background-image: url("../meteor-solid.svg");
+-+	}
+-+
+-+	75% {
+-+		transform: scale(1.2);
+-+		background-image: url("../meteor-solid.svg");
+-+	}
+-+
+-+	100% {
+-+		transform: scale(1);
+-+		background-image: url("../meteor-solid.svg");
+-+	}
+- }
+-+
+- .node-visited {
+- 	animation-name: visitedAnimation;
+- 	animation-duration: 1.5s;
+-@@ -50,6 +80,7 @@
+- 	}
+- }
+- 
+-+
+- .node-shortest-path {
+- 	animation-name: shortestPath;
+- 	animation-duration: 1.5s;
+-diff --git a/astro-visualizer/src/RandObstacles/RandomDraw.js b/astro-visualizer/src/RandObstacles/RandomDraw.js
+-index 60b411c..cf558a1 100644
+---- a/astro-visualizer/src/RandObstacles/RandomDraw.js
+-+++ b/astro-visualizer/src/RandObstacles/RandomDraw.js
+-@@ -1,4 +1,4 @@
+--const threshold = 0.25;
+-+const threshold = 0.6;
+- 
+- const makeGrid = (rows, cols) => {
+-   const grid = [];
+-@@ -14,16 +14,16 @@ const makeGrid = (rows, cols) => {
+- 
+- export const generateRandomObstacles = (rows, cols) => {
+-   const grid = makeGrid(rows, cols);
+--  generateOnRandom(grid);
+--  return grid;
+-+  const wallsInOrder = generateOnRandom(grid);
+-+  return wallsInOrder;
+- };
+- 
+- const outOfBounds = (row, col, rows, cols) => {
+--  return currRow === rows || urrCol === cols || currRow < 0 || currCol < 0
+-+  return row === rows || col === cols || row < 0 || col < 0
+- }
+- 
+- const randomIntUpToLimit = (limit) => {
+--  return Math.floor(Math.Random() * limit);
+-+  return Math.floor(Math.random() * limit);
+- }
+- 
+- const extractSizes = (grid) => {
+-@@ -33,10 +33,10 @@ const extractSizes = (grid) => {
+- }
+- 
+- const generateOnRandom = (grid) => {
+-+  const wallsInOrder = [];
+-   const {rows, cols} = extractSizes(grid);
+-   const minSize = cols > rows ? rows : cols;
+--  const cells = rows * cols;
+--  const walls = Math.floor(randomIntUpToLimit(cells) * threshold);
+-+  const walls = Math.floor(randomIntUpToLimit(rows+cols) * threshold);
+-   for (let wall = 0; wall < walls; wall++) { 
+-     const startRow = randomIntUpToLimit(rows);
+-     const startCol = randomIntUpToLimit(cols);
+-@@ -45,17 +45,19 @@ const generateOnRandom = (grid) => {
+- 
+-     let currRow = startRow;
+-     let currCol = startCol;
+--    const length = Math.floor(Math.Random() * minSize);
+-+    const length = Math.floor(Math.random() * minSize);
+- 
+-     for (let i = 0; i <= length; i++) {
+-       if (outOfBounds(currRow, currCol, rows, cols)) {
+-         break;
+-       }
+-+      wallsInOrder.push({row: currRow, col:currCol})
+-       grid[currRow][currCol] = true;
+-       currRow += directionX;
+-       currCol += directionY;
+-     }
+-   }
+-+  return wallsInOrder;
+- };
+- 
+- const randomDirection = () => {
+diff --git a/astro-visualizer/src/App.js b/astro-visualizer/src/App.js
+index e13964a..7cba82f 100644
+--- a/astro-visualizer/src/App.js
++++ b/astro-visualizer/src/App.js
+@@ -47,7 +47,7 @@ export default function App() {
+     setSpeed(speedAsNumber);
+   };
+ 
+-  let setMazeAsWalls = (mazeAsText) => {
++  const setMazeAsWalls = (mazeAsText) => {
+     switch (mazeAsText) {
+       case "Draw Obstacles":
+         setObstacles(true);
+@@ -66,6 +66,18 @@ export default function App() {
+         throw new Error(`${mazeAsText} is unknown`);
+     }
+   };
++  const clearBoard = () => {
++    grid.forEach((row) => {
++      row.forEach((node) => {
++        if(node.isStart || node.isFinish || !node.isWall) {
++          return;
++        }
++        const newGrid = getNewGridWithWallToggled(grid, node.row, node.col);
++        setGrid(newGrid);
++      })
++    });
++  };
++
+   useEffect(() => {
+     const grid = getInitialGrid();
+     setGrid(grid);
+@@ -154,15 +166,18 @@ export default function App() {
+ 
+   const timeout = (delay) => {
+     return new Promise((resolve, reject) => {
+-      setTimeout(resolve, delay)
+-    })
+-  }
+-  const addWalls = async() => {
+-    
++      setTimeout(resolve, delay);
++    });
++  };
++  const addWalls = async () => {
+     const walls = generateRandomObstacles(ROWS, COLS);
+     setIsBlockedVisualize(true);
+     for (let i = 0; i < walls.length; i++) {
+-      const newGrid = getNewGridWithWallToggled(grid, walls[i].row, walls[i].col);
++      const newGrid = getNewGridWithWallToggled(
++        grid,
++        walls[i].row,
++        walls[i].col
++      );
+       setGrid(newGrid);
+       await timeout(100);
+     }
+@@ -176,6 +191,7 @@ export default function App() {
+         setSpeed={setNumberSpeed}
+         setMaze={setMazeAsWalls}
+         disableVisualizeButton={isBlockedVisualize}
++        clearBoard={clearBoard}
+       />
+       <div className="grid">
+         {grid.map((row, rowInx) => {
+@@ -213,9 +229,9 @@ export default function App() {
+ 
+ const getInitialGrid = () => {
+   const grid = [];
+-  for (let row = 0; row < 20; row++) {
++  for (let row = 0; row < ROWS; row++) {
+     const currentRow = [];
+-    for (let col = 0; col < 40; col++) {
++    for (let col = 0; col < COLS; col++) {
+       currentRow.push(createNode(col, row));
+     }
+     grid.push(currentRow);
+diff --git a/astro-visualizer/src/NavBar/NavBar.js b/astro-visualizer/src/NavBar/NavBar.js
+index 7a81c87..b92740b 100644
+--- a/astro-visualizer/src/NavBar/NavBar.js
++++ b/astro-visualizer/src/NavBar/NavBar.js
+@@ -5,12 +5,18 @@ import { Dropdown } from "./Dropdown/Dropdown";
+ 
+ const ALGORITHM_LABELS = ["Dijkstra", "A*", "Swarm"];
+ const SPEED_LABELS = ["Slow", "Medium", "Fast"];
+-const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Recursive Division"]
++const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Recursive Division"];
+ const ALGORITHMS_TITLE = "Algorithms";
+ const SPEED_TITLE = "Speed";
+-const MAZE_TITLE = "Draw"
++const MAZE_TITLE = "Draw";
+ 
+-export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVisualizeButton }) {
++export default function NavBar({
++  visualizeDijkstra,
++  setSpeed,
++  setMaze,
++  disableVisualizeButton,
++  clearBoard,
++}) {
+   const [selected, setSelected] = useState("Dijkstras");
+   const refreshPage = () => {
+     window.location.reload(false);
+@@ -33,7 +39,11 @@ export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVi
+           labels={SPEED_LABELS}
+           title={SPEED_TITLE}
+         />
+-        <button className="controls-visualize" onClick={visualizeDijkstra} disabled={disableVisualizeButton}>
++        <button
++          className="controls-visualize"
++          onClick={visualizeDijkstra}
++          disabled={disableVisualizeButton}
++        >
+           Start Journey using {selected} algorithm
+         </button>
+         <Dropdown
+@@ -42,7 +52,9 @@ export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVi
+           labels={MAZE_LABELS}
+           title={MAZE_TITLE}
+         />
+-        <button className="controls-clear">Clear board</button>
++        <button className="controls-clear" onClick={clearBoard}>
++          Clear board
++        </button>
+       </div>
+       <div className="labels">
+         <div className="labels-start">
+diff --git a/astro-visualizer/src/Node/Node.css b/astro-visualizer/src/Node/Node.css
+index af0e68a..fda68af 100644
+--- a/astro-visualizer/src/Node/Node.css
++++ b/astro-visualizer/src/Node/Node.css
+@@ -15,36 +15,7 @@
+ }
+ 
+ .node-wall {
+-	animation-name: obstacleAnimation;
+-	animation-duration: 1.5s;
+-	animation-timing-function: ease-out;
+-	animation-delay: 0;
+-	animation-direction: alternate;
+-	animation-iteration-count: 1;
+-	animation-fill-mode: forwards;
+-	animation-play-state: running;
+-}
+-
+-@keyframes obstacleAnimation {
+-	0% {
+-		transform: scale(0.6);
+-		background-image: url("../meteor-solid.svg");
+-		border-radius: 100%;
+-	}
+-
+-	50% {
+-		background-image: url("../meteor-solid.svg");
+-	}
+-
+-	75% {
+-		transform: scale(1.2);
+-		background-image: url("../meteor-solid.svg");
+-	}
+-
+-	100% {
+-		transform: scale(1);
+-		background-image: url("../meteor-solid.svg");
+-	}
++	background-image: url("../meteor-solid.svg");
+ }
+ 
+ .node-visited {

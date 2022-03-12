@@ -5,12 +5,18 @@ import { Dropdown } from "./Dropdown/Dropdown";
 
 const ALGORITHM_LABELS = ["Dijkstra", "A*", "Swarm"];
 const SPEED_LABELS = ["Slow", "Medium", "Fast"];
-const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Recursive Division"]
+const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Recursive Division"];
 const ALGORITHMS_TITLE = "Algorithms";
 const SPEED_TITLE = "Speed";
-const MAZE_TITLE = "Draw"
+const MAZE_TITLE = "Draw";
 
-export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVisualizeButton }) {
+export default function NavBar({
+  visualizeDijkstra,
+  setSpeed,
+  setMaze,
+  disableVisualizeButton,
+  clearBoard,
+}) {
   const [selected, setSelected] = useState("Dijkstras");
   const refreshPage = () => {
     window.location.reload(false);
@@ -33,7 +39,11 @@ export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVi
           labels={SPEED_LABELS}
           title={SPEED_TITLE}
         />
-        <button className="controls-visualize" onClick={visualizeDijkstra} disabled={disableVisualizeButton}>
+        <button
+          className="controls-visualize"
+          onClick={visualizeDijkstra}
+          disabled={disableVisualizeButton}
+        >
           Start Journey using {selected} algorithm
         </button>
         <Dropdown
@@ -42,7 +52,9 @@ export default function NavBar({ visualizeDijkstra, setSpeed, setMaze, disableVi
           labels={MAZE_LABELS}
           title={MAZE_TITLE}
         />
-        <button className="controls-clear">Clear board</button>
+        <button className="controls-clear" onClick={clearBoard}>
+          Clear board
+        </button>
       </div>
       <div className="labels">
         <div className="labels-start">
