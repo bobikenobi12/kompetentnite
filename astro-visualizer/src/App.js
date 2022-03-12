@@ -28,7 +28,6 @@ export default function App() {
   const [speed, setSpeed] = useState(60);
   const [maze, setMaze] = useState("Random");
   const [isBlockedVisualize, setIsBlockedVisualize] = useState(false);
-
   const setNumberSpeed = (speedAsText) => {
     let speedAsNumber = SLOW_SPEED;
     switch (speedAsText) {
@@ -69,12 +68,12 @@ export default function App() {
   const clearBoard = () => {
     grid.forEach((row) => {
       row.forEach((node) => {
-        if(node.isStart || node.isFinish || !node.isWall) {
+        if (node.isStart || node.isFinish || !node.isWall) {
           return;
         }
         const newGrid = getNewGridWithWallToggled(grid, node.row, node.col);
         setGrid(newGrid);
-      })
+      });
     });
   };
 
@@ -172,14 +171,29 @@ export default function App() {
   const addWalls = async () => {
     const walls = generateRandomObstacles(ROWS, COLS);
     setIsBlockedVisualize(true);
-    for (let i = 0; i < walls.length; i++) {
-      const newGrid = getNewGridWithWallToggled(
-        grid,
-        walls[i].row,
-        walls[i].col
-      );
+    let doneWith = 0;
+    let empties = Array(walls.length).fill(false);
+    while (doneWith!==walls.length) {
+      let newGrid = null;
+      for (let i = 0; i < walls.length; i++) {
+        if(walls[i].length === 0) {
+          if(!empties[i]){
+            empties[i] = true;
+            doneWith++;
+          }
+          continue;
+        }
+        let cell = walls[i].pop();
+        newGrid = getNewGridWithWallToggled(
+          grid,
+          cell.row,
+          cell.col
+        );
+      }
+      if(newGrid !== null) {
       setGrid(newGrid);
-      await timeout(100);
+      }
+      await timeout(300);
     }
     setIsBlockedVisualize(false);
   };

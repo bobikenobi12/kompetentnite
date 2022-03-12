@@ -3,7 +3,7 @@ import "./NavBar.css";
 import { useState } from "react";
 import { Dropdown } from "./Dropdown/Dropdown";
 
-const ALGORITHM_LABELS = ["Dijkstra", "A*", "Swarm"];
+const ALGORITHM_LABELS = ["Dijkstra", "A*"];
 const SPEED_LABELS = ["Slow", "Medium", "Fast"];
 const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Recursive Division"];
 const ALGORITHMS_TITLE = "Algorithms";

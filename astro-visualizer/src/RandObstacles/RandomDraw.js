@@ -1,4 +1,4 @@
-const threshold = 0.6;
+const threshold = 0.8;
 
 const makeGrid = (rows, cols) => {
   const grid = [];
@@ -46,16 +46,17 @@ const generateOnRandom = (grid) => {
     let currRow = startRow;
     let currCol = startCol;
     const length = Math.floor(Math.random() * minSize);
-
+    let currPath = [];
     for (let i = 0; i <= length; i++) {
       if (outOfBounds(currRow, currCol, rows, cols)) {
         break;
       }
-      wallsInOrder.push({row: currRow, col:currCol})
+      currPath.push({row: currRow, col:currCol})
       grid[currRow][currCol] = true;
       currRow += directionX;
       currCol += directionY;
     }
+    wallsInOrder.push(currPath);
   }
   return wallsInOrder;
 };
