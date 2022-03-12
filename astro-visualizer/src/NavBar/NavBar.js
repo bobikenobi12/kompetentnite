@@ -11,7 +11,7 @@ export const algorithm = {
 }
 const ALGORITHM_LABELS = Object.values(algorithm);
 const SPEED_LABELS = ["Slow", "Medium", "Fast"];
-const MAZE_LABELS = ["Draw Obstacles", "Random Draw"];
+const MAZE_LABELS = ["Draw Obstacles", "Random Draw", "Generate Maze"];
 const ALGORITHMS_TITLE = "Algorithms";
 const SPEED_TITLE = "Speed";
 const MAZE_TITLE = "Draw";

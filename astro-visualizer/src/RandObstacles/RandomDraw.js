@@ -1,6 +1,6 @@
 const threshold = 0.8;
 
-const makeGrid = (rows, cols) => {
+export const makeGrid = (rows, cols) => {
   const grid = [];
   for (let row = 0; row < rows; row++) {
     const currentRow = [];
@@ -18,18 +18,18 @@ export const generateRandomObstacles = (rows, cols) => {
   return wallsInOrder;
 };
 
-const outOfBounds = (row, col, rows, cols) => {
-  return row === rows || col === cols || row < 0 || col < 0
-}
-
-const randomIntUpToLimit = (limit) => {
-  return Math.floor(Math.random() * limit);
-}
-
-const extractSizes = (grid) => {
+export const extractSizes = (grid) => {
   const rows = grid.length;
   const cols = grid[0].length;
   return {rows, cols};
+}
+
+export const randomIntUpToLimit = (limit) => {
+  return Math.floor(Math.random() * limit);
+}
+
+const outOfBounds = (row, col, rows, cols) => {
+  return row === rows || col === cols || row < 0 || col < 0
 }
 
 const generateOnRandom = (grid) => {

@@ -6,6 +6,7 @@ import Node from "./Node/Node";
 import NavBar from "./NavBar/NavBar";
 import { dijkstra, getNodesInShortestPathOrder } from "./Algorithms/Dijkstras";
 import { generateRandomObstacles } from "./RandObstacles/RandomDraw";
+import { generateMaze } from "./RandObstacles/Maze";
 import {
   aStar,
   euclidianDistance,
@@ -63,12 +64,13 @@ export default function App() {
       case "Random Draw":
         setObstacles(false);
         setMaze("Random Draw");
-        addWalls();
+        addRandomWalls();
         break;
-      // case "Recursive Division":
-      //   setObstacles(false);
-      //   setMaze("Recursive Division");
-      //   break;
+      case "Generate Maze":
+        setObstacles(false);
+        setMaze("Generate Maze");
+        drawMaze();
+        break;
       default:
         throw new Error(`${mazeAsText} is unknown`);
     }
@@ -225,7 +227,7 @@ export default function App() {
       setTimeout(resolve, delay);
     });
   };
-  const addWalls = async () => {
+  const addRandomWalls = async () => {
     const walls = generateRandomObstacles(ROWS, COLS);
     setIsBlockedVisualize(true);
     let doneWith = 0;
@@ -250,6 +252,14 @@ export default function App() {
     }
     setIsBlockedVisualize(false);
   };
+
+  const drawMaze = () => {
+   generateMaze(grid, grid[startNodeRow][startNodeCol], grid[finishNodeRow][finishNodeCol]);
+   console.log("reaches drawMaze after generating");
+   setGrid(grid);
+   console.log(grid);
+  }
+
   return (
     <>
       <NavBar
