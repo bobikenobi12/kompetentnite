@@ -1,6 +1,5 @@
 # Astro Visualizer
 
-## [Logo](https://github.com/bobikenobi12/nftopus/images/LOGO.png)
 This project contains a react app and pathfinding algorithms to find the most optimal path between the starting planet and the target planet.
 
 ## Requirements
