@@ -23,7 +23,7 @@ const START_NODE_COL = 10;
 const FINISH_NODE_ROW = 15;
 const FINISH_NODE_COL = 35;
 const ROWS = 25;
-const COLS = 60;
+const COLS = 50;
 
 export default function App() {
   const [grid, setGrid] = useState([]);
@@ -115,8 +115,9 @@ export default function App() {
           : oldNode.isWall
           ? "node-wall"
           : "";
-        document.getElementById(`node-${oldNode.row}-${oldNode.col}`).className =
-          "node " + extraClassName;
+        document.getElementById(
+          `node-${oldNode.row}-${oldNode.col}`
+        ).className = "node " + extraClassName;
       }
       newGrid.push(newRow);
     }
@@ -254,11 +255,15 @@ export default function App() {
   };
 
   const drawMaze = () => {
-   generateMaze(grid, grid[startNodeRow][startNodeCol], grid[finishNodeRow][finishNodeCol]);
-   console.log("reaches drawMaze after generating");
-   setGrid(grid);
-   console.log(grid);
-  }
+    generateMaze(
+      grid,
+      grid[startNodeRow][startNodeCol],
+      grid[finishNodeRow][finishNodeCol]
+    );
+    console.log("reaches drawMaze after generating");
+    setGrid(grid);
+    console.log(grid);
+  };
 
   return (
     <>
